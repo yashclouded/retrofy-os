@@ -15,7 +15,7 @@ export function SnakeApp() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const generateFood = useCallback((currentSnake: {x: number, y: number}[]) => {
-    let newFood;
+    let newFood: { x: number, y: number };
     while (true) {
       newFood = {
         x: Math.floor(Math.random() * GRID_SIZE),
