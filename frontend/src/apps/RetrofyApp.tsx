@@ -18,8 +18,10 @@ export function RetrofyApp() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
   useEffect(() => {
-    fetch('/api/presets')
+    fetch(`${apiUrl}/api/presets`)
       .then(res => res.json())
       .then(data => setConfig(data))
       .catch(console.error);
@@ -44,7 +46,7 @@ export function RetrofyApp() {
     formData.append('file', file);
 
     try {
-      const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+      const uploadRes = await fetch(`${apiUrl}/api/upload`, { method: 'POST', body: formData });
       if (!uploadRes.ok) throw new Error('Upload failed');
       const uploadData = await uploadRes.json();
 
@@ -54,7 +56,7 @@ export function RetrofyApp() {
       processDataForm.append('preset_id', presetId);
       processDataForm.append('profile_id', profileId);
       
-      const processRes = await fetch('/api/process', {
+      const processRes = await fetch(`${apiUrl}/api/process`, {
         method: 'POST',
         body: processDataForm,
       });
@@ -65,7 +67,7 @@ export function RetrofyApp() {
       }
 
       const processData = await processRes.json();
-      setProcessedUrl(`/api/download/${processData.file_id}`);
+      setProcessedUrl(`${apiUrl}/api/download/${processData.file_id}`);
       setStatus('idle');
       
       // Auto-play when ready
